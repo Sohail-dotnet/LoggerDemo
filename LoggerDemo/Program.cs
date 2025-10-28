@@ -10,12 +10,21 @@ namespace LoggerDemo
 
             var builder = WebApplication.CreateBuilder(args);
 
+            #region Serilog Configuration
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Hour)
                 .CreateLogger();
 
+            // Use Serilog along with buit-in logging providers
+            builder.Logging.AddSerilog();
+
+            // Use this line to override built-in logging providers
             builder.Host.UseSerilog();
+            #endregion
+
+            builder.Logging.ClearProviders();
+
             builder.Services.AddControllers();
 
 
